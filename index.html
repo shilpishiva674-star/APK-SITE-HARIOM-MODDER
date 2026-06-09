@@ -3,88 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">SMM Panel</title>
+    <title>HARIOM MODDER - User Panel</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: #0f172a; color: #e2e8f0; }
-       .announcement { background: #facc15; color: #020617; text-align: center; padding: 8px; font-weight: bold; display: none; }
-       .navbar { background: #1e293b; padding: 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
-       .logo { font-size: 1.5rem; font-weight: bold; color: #38bdf8; }
-       .nav-right { display: flex; gap: 1rem; align-items: center; }
-       .balance { background: #334155; padding: 8px 16px; border-radius: 20px; }
-       .btn-logout { background: #f87171; color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; border: none; }
-       .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-       .auth-box { max-width: 400px; margin: 5rem auto; background: #1e293b; padding: 2rem; border-radius: 12px; border: 1px solid #334155; }
-       .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-       .card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; margin-bottom: 1rem; }
+      .navbar { background: #1e293b; padding: 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
+      .logo { font-size: 1.5rem; font-weight: bold; color: #38bdf8; }
+      .nav-right { display: flex; gap: 1rem; align-items: center; }
+      .balance { background: #334155; padding: 8px 16px; border-radius: 20px; }
+      .btn-logout { background: #f87171; color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; border: none; }
+      .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+      .auth-box { max-width: 400px; margin: 5rem auto; background: #1e293b; padding: 2rem; border-radius: 12px; border: 1px solid #334155; }
+      .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; margin-bottom: 1rem; }
         h2 { color: #38bdf8; margin-bottom: 1rem; }
         input, select, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #e2e8f0; font-size: 16px; }
         button { background: #38bdf8; color: #0f172a; font-weight: bold; cursor: pointer; border: none; }
-        button:hover { background: #0ea5e9; }
-       .tabs { display: flex; gap: 1rem; margin-bottom: 1rem; }
-       .tab { padding: 8px 16px; background: #334155; border-radius: 8px; cursor: pointer; }
-       .tab.active { background: #38bdf8; color: #0f172a; }
-       .order-item { background: #0f172a; padding: 10px; margin: 8px 0; border-radius: 8px; border-left: 3px solid #38bdf8; }
-       .status-Pending { color: #facc15; }
-       .status-Completed { color: #4ade80; }
-       .status-Cancelled { color: #f87171; }
-       .maintenance { text-align: center; padding: 4rem; font-size: 2rem; color: #f87171; }
-       .hidden { display: none; }
+        button:disabled { background: #475569; }
+      .tabs { display: flex; gap: 1rem; margin-bottom: 1rem; }
+      .tab { padding: 8px 16px; background: #334155; border-radius: 8px; cursor: pointer; }
+      .tab.active { background: #38bdf8; color: #0f172a; }
+      .order-item { background: #0f172a; padding: 10px; margin: 8px 0; border-radius: 8px; border-left: 3px solid #38bdf8; }
+      .status-Pending { color: #facc15; }
+      .status-In.progress { color: #38bdf8; }
+      .status-Completed { color: #4ade80; }
+      .status-Canceled { color: #f87171; }
+      .hidden { display: none; }
+      .loader { border: 3px solid #334155; border-top: 3px solid #38bdf8; border-radius: 50%; width: 18px; height: 18px; animation: spin 1s linear infinite; display: inline-block; }
+       @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @media(max-width: 768px) {.grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <div class="announcement" id="announcementBar"></div>
-    
-    <!-- LOGIN/REGISTER -->
+    <!-- LOGIN -->
     <div id="authSection">
         <div class="auth-box">
             <div class="tabs">
                 <div class="tab active" onclick="showAuth('login')">Login</div>
                 <div class="tab" onclick="showAuth('register')">Register</div>
             </div>
-            
             <div id="loginForm">
                 <h2>Login</h2>
-                <input type="email" id="loginEmail" placeholder="Gmail">
+                <input type="email" id="loginEmail" placeholder="Email">
                 <input type="password" id="loginPassword" placeholder="Password">
                 <button onclick="loginUser()">Login</button>
             </div>
-
             <div id="registerForm" class="hidden">
                 <h2>Register</h2>
                 <input type="text" id="regName" placeholder="Full Name">
-                <input type="email" id="regEmail" placeholder="Gmail">
+                <input type="email" id="regEmail" placeholder="Email">
                 <input type="password" id="regPassword" placeholder="Password">
                 <button onclick="registerUser()">Create Account</button>
             </div>
         </div>
     </div>
 
-    <!-- MAIN DASHBOARD -->
+    <!-- DASHBOARD -->
     <div id="dashboard" class="hidden">
         <div class="navbar">
-            <div class="logo" id="siteNameLogo">⚡ SMM Panel</div>
+            <div class="logo">⚡ HARIOM MODDER</div>
             <div class="nav-right">
                 <div>Hi, <span id="userName"></span></div>
-                <div class="balance">Balance: ₹<span id="userBalance">0</span></div>
+                <div class="balance">Balance: $<span id="userBalance">0.00</span></div>
                 <button class="btn-logout" onclick="logout()">Logout</button>
             </div>
         </div>
-
         <div class="container">
             <div class="grid">
                 <div class="card">
                     <h2>New Order</h2>
-                    <select id="category" onchange="loadServices()"><option value="">Select Category</option></select>
-                    <select id="service"><option value="">Select Service First</option></select>
-                    <input type="text" id="link" placeholder="Profile/Video Link">
-                    <input type="number" id="quantity" placeholder="Quantity" oninput="calcPrice()">
-                    <p>Min: <span id="minQty">0</span> | Max: <span id="maxQty">0</span></p>
-                    <p>Total: ₹<span id="totalPrice">0.00</span></p>
-                    <button onclick="placeOrder()">Place Order</button>
+                    <select id="category" onchange="filterServices()"><option value="">Select Category</option></select>
+                    <select id="service" onchange="showServiceInfo()"><option value="">Select Service</option></select>
+                    <div style="font-size:12px;color:#94a3b8;" id="serviceDetails"></div>
+                    <input type="text" id="link" placeholder="Link">
+                    <input type="number" id="quantity" placeholder="Quantity" oninput="calcCost()">
+                    <p>Your Price: $<span id="totalCost">0.0000</span></p>
+                    <button id="orderBtn" onclick="placeOrder()">Place Order</button>
                 </div>
-
                 <div class="card">
                     <div class="tabs">
                         <div class="tab active" onclick="showTab('services')">Services</div>
@@ -97,47 +92,42 @@
         </div>
     </div>
 
-    <div id="maintenanceDiv" class="maintenance hidden">🚧 Site Under Maintenance</div>
-
 <script>
-// INIT DEFAULT DATA
-if(!localStorage.getItem('siteSettings')) {
-    localStorage.setItem('siteSettings', JSON.stringify({
-        siteName: 'HARIOM MODDER', defaultBalance: 1000, announcement: '', maintenance: false
-    }));
-}
-if(!localStorage.getItem('allServices')) {
-    localStorage.setItem('allServices', JSON.stringify({
-        instagram: [{id: 1001, name: "Instagram Followers", rate: 60, min: 100, max: 100000}],
-        youtube: [{id: 2001, name: "YouTube Views", rate: 40, min: 1000, max: 1000000}]
-    }));
-}
-if(!localStorage.getItem('users')) localStorage.setItem('users', JSON.stringify([]));
-
+const API_URL = 'https://gurusmmpanels.com/api/v2';
+const PROFIT_MARGIN = 1.5; // 50% profit
 let currentUser = null;
+let allServices = [];
+
+// ADMIN PANEL SE API KEY AUR SERVICES LOAD HONGE
+function getConfig() {
+    return JSON.parse(localStorage.getItem('siteConfig') || '{"apiKey":"","services":[]}');
+}
+
+async function apiCall(params) {
+    let config = getConfig();
+    if(!config.apiKey) return {error: 'API Key not set by admin'};
+    
+    let formData = new FormData();
+    formData.append('key', config.apiKey);
+    for(let key in params) formData.append(key, params[key]);
+    
+    try {
+        let res = await fetch(API_URL, { method: 'POST', body: formData });
+        return await res.json();
+    } catch(e) {
+        let res = await fetch('https://corsproxy.io/?' + encodeURIComponent(API_URL), { method: 'POST', body: formData });
+        return await res.json();
+    }
+}
 
 function init() {
-    let settings = JSON.parse(localStorage.getItem('siteSettings'));
-    if(settings.maintenance) {
-        document.getElementById('authSection').classList.add('hidden');
-        document.getElementById('dashboard').classList.add('hidden');
-        document.getElementById('maintenanceDiv').classList.remove('hidden');
-        return;
-    }
-    document.getElementById('siteNameLogo').innerText = '⚡ ' + settings.siteName;
-    document.getElementById('pageTitle').innerText = settings.siteName;
-    if(settings.announcement) {
-        document.getElementById('announcementBar').style.display = 'block';
-        document.getElementById('announcementBar').innerText = settings.announcement;
-    }
-    
-    // Check if logged in
     let loggedInEmail = sessionStorage.getItem('loggedInUser');
     if(loggedInEmail) {
-        let users = JSON.parse(localStorage.getItem('users'));
+        let users = JSON.parse(localStorage.getItem('panelUsers') || '[]');
         currentUser = users.find(u => u.email === loggedInEmail);
         if(currentUser) showDashboard();
     }
+    loadServicesFromAdmin();
 }
 
 function showAuth(type) {
@@ -153,15 +143,11 @@ function registerUser() {
     let pass = document.getElementById('regPassword').value;
     if(!name ||!email ||!pass) return alert('Sab field bhar');
     
-    let users = JSON.parse(localStorage.getItem('users'));
+    let users = JSON.parse(localStorage.getItem('panelUsers') || '[]');
     if(users.find(u => u.email === email)) return alert('Email already registered');
     
-    let settings = JSON.parse(localStorage.getItem('siteSettings'));
-    users.push({
-        id: Date.now(), name: name, email: email, password: pass,
-        balance: settings.defaultBalance, joinDate: new Date().toLocaleString()
-    });
-    localStorage.setItem('users', JSON.stringify(users));
+    users.push({ id: Date.now(), name, email, password: pass, balance: 0, joinDate: new Date().toLocaleString() });
+    localStorage.setItem('panelUsers', JSON.stringify(users));
     alert('Account Created! Ab Login kar');
     showAuth('login');
 }
@@ -169,10 +155,9 @@ function registerUser() {
 function loginUser() {
     let email = document.getElementById('loginEmail').value.toLowerCase();
     let pass = document.getElementById('loginPassword').value;
-    let users = JSON.parse(localStorage.getItem('users'));
+    let users = JSON.parse(localStorage.getItem('panelUsers') || '[]');
     let user = users.find(u => u.email === email && u.password === pass);
     if(!user) return alert('Wrong Email/Password');
-    
     currentUser = user;
     sessionStorage.setItem('loggedInUser', user.email);
     showDashboard();
@@ -181,10 +166,15 @@ function loginUser() {
 function showDashboard() {
     document.getElementById('authSection').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
-    document.getElementById('userName').innerText = currentUser.name;
-    document.getElementById('userBalance').innerText = currentUser.balance.toFixed(2);
-    loadCategories();
+    updateUserData();
     loadOrders();
+}
+
+function updateUserData() {
+    let users = JSON.parse(localStorage.getItem('panelUsers') || '[]');
+    currentUser = users.find(u => u.email === currentUser.email);
+    document.getElementById('userName').innerText = currentUser.name;
+    document.getElementById('userBalance').innerText = currentUser.balance.toFixed(4);
 }
 
 function logout() {
@@ -192,79 +182,94 @@ function logout() {
     location.reload();
 }
 
-function loadCategories() {
-    let services = JSON.parse(localStorage.getItem('allServices'));
+function loadServicesFromAdmin() {
+    let config = getConfig();
+    allServices = config.services || [];
+    let categories = new Set(allServices.map(s => s.category));
+    
     let catSelect = document.getElementById('category');
-    catSelect.innerHTML = '<option value="">Select Category</option>';
-    Object.keys(services).forEach(cat => {
-        catSelect.innerHTML += `<option value="${cat}">${cat.toUpperCase()}</option>`;
-    });
+    catSelect.innerHTML = '<option value="">All Categories</option>';
+    categories.forEach(c => catSelect.innerHTML += `<option value="${c}">${c}</option>`);
+    
+    filterServices();
+    document.getElementById('servicesTableBody').innerHTML = allServices.map(s => 
+        `<p><b>${s.name}</b> - $${s.sell_rate}/1K</p>`
+    ).join('');
 }
 
-function loadServices() {
+function filterServices() {
     let cat = document.getElementById('category').value;
-    let services = JSON.parse(localStorage.getItem('allServices'));
     let serviceSelect = document.getElementById('service');
-    let tableBody = document.getElementById('servicesTableBody');
     serviceSelect.innerHTML = '<option value="">Select Service</option>';
-    tableBody.innerHTML = '';
-    if(services[cat]) {
-        services[cat].forEach(s => {
-            serviceSelect.innerHTML += `<option value="${s.id}" data-rate="${s.rate}" data-min="${s.min}" data-max="${s.max}">${s.name}</option>`;
-            tableBody.innerHTML += `<p><b>${s.name}</b> - ₹${s.rate}/1K | Min: ${s.min}</p>`;
-        });
-    }
-}
-
-function calcPrice() {
-    let service = document.getElementById('service');
-    let opt = service.options[service.selectedIndex];
-    let qty = document.getElementById('quantity').value;
-    let rate = opt?.dataset.rate || 0;
-    document.getElementById('minQty').innerText = opt?.dataset.min || 0;
-    document.getElementById('maxQty').innerText = opt?.dataset.max || 0;
-    document.getElementById('totalPrice').innerText = (qty / 1000 * rate).toFixed(2);
-}
-
-function placeOrder() {
-    let service = document.getElementById('service');
-    let opt = service.options[service.selectedIndex];
-    if(!opt.value) return alert('Service select kar');
-    let qty = parseInt(document.getElementById('quantity').value);
-    let min = parseInt(opt.dataset.min);
-    let max = parseInt(opt.dataset.max);
-    if(qty < min || qty > max) return alert(`Quantity ${min} se ${max} ke beech honi chahiye`);
     
-    let total = parseFloat(document.getElementById('totalPrice').innerText);
-    if(total > currentUser.balance) return alert('Balance kam hai');
-    
-    // Balance deduct karo
-    let users = JSON.parse(localStorage.getItem('users'));
-    let userIndex = users.findIndex(u => u.email === currentUser.email);
-    users[userIndex].balance -= total;
-    currentUser.balance -= total;
-    localStorage.setItem('users', JSON.stringify(users));
-    document.getElementById('userBalance').innerText = currentUser.balance.toFixed(2);
-    
-    // Order save karo
-    let orders = JSON.parse(localStorage.getItem('orders') || '[]');
-    orders.unshift({
-        id: Date.now(), userEmail: currentUser.email, service: opt.text,
-        link: document.getElementById('link').value, qty: qty, total: total,
-        status: 'Pending', date: new Date().toLocaleString()
+    let filtered = cat? allServices.filter(s => s.category === cat) : allServices;
+    filtered.forEach(s => {
+        serviceSelect.innerHTML += `<option value="${s.service}" data-rate="${s.rate}" data-sell="${s.sell_rate}" data-min="${s.min}" data-max="${s.max}">${s.service} - ${s.name}</option>`;
     });
-    localStorage.setItem('orders', JSON.stringify(orders));
-    alert('Order Placed Successfully!');
-    loadOrders();
+}
+
+function showServiceInfo() {
+    let opt = document.getElementById('service').selectedOptions[0];
+    if(!opt.value) return;
+    document.getElementById('serviceDetails').innerHTML = `Rate: $${opt.dataset.sell}/1K | Min: ${opt.dataset.min} | Max: ${opt.dataset.max}`;
+    calcCost();
+}
+
+function calcCost() {
+    let opt = document.getElementById('service').selectedOptions[0];
+    let qty = document.getElementById('quantity').value;
+    let sellRate = opt?.dataset.sell || 0;
+    document.getElementById('totalCost').innerText = (qty / 1000 * sellRate).toFixed(4);
+}
+
+async function placeOrder() {
+    let service = document.getElementById('service').value;
+    let link = document.getElementById('link').value;
+    let qty = parseInt(document.getElementById('quantity').value);
+    if(!service ||!link ||!qty) return alert('Sab bhar bhai');
+    
+    let opt = document.getElementById('service').selectedOptions[0];
+    let sellRate = parseFloat(opt.dataset.sell);
+    let cost = qty / 1000 * sellRate;
+    
+    if(cost > currentUser.balance) return alert('Balance kam hai. Admin se add karwao.');
+    
+    let btn = document.getElementById('orderBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="loader"></div> Placing...';
+    
+    let data = await apiCall({action: 'add', service: service, link: link, quantity: qty});
+    
+    if(data.order) {
+        // Balance deduct
+        let users = JSON.parse(localStorage.getItem('panelUsers'));
+        let userIndex = users.findIndex(u => u.email === currentUser.email);
+        users[userIndex].balance -= cost;
+        localStorage.setItem('panelUsers', JSON.stringify(users));
+        
+        // Order save
+        let orders = JSON.parse(localStorage.getItem('panelOrders') || '[]');
+        orders.unshift({ id: data.order, userEmail: currentUser.email, service, link, qty, cost, status: 'Pending', date: new Date().toLocaleString() });
+        localStorage.setItem('panelOrders', JSON.stringify(orders));
+        
+        alert('Order Success! ID: ' + data.order);
+        updateUserData();
+        loadOrders();
+    } else {
+        alert('Order Failed: ' + (data.error || 'Unknown'));
+    }
+    
+    btn.disabled = false;
+    btn.innerHTML = 'Place Order';
 }
 
 function loadOrders() {
-    let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+    let orders = JSON.parse(localStorage.getItem('panelOrders') || '[]');
     let myOrders = orders.filter(o => o.userEmail === currentUser.email);
     document.getElementById('orderList').innerHTML = myOrders.map(o => `
         <div class="order-item">
-            <b>#${o.id}</b> - ${o.service}<br>
-            Qty: ${o.qty} | ₹${o.total} | <span class="status-${o.status}">${o.status}</span><br>
+            <b>#${o.id}</b> - Service: ${o.service}<br>
+            Qty: ${o.qty} | Cost: $${o.cost.toFixed(4)} | <span class="status-${o.status.replace(' ','.')}">${o.status}</span><br>
             <small>${o.date}</small>
         </div>
     `).join('') || '<p>No orders yet</p>';
@@ -278,14 +283,7 @@ function showTab(tab) {
 }
 
 init();
-setInterval(() => {
-    init();
-    if(currentUser) {
-        let users = JSON.parse(localStorage.getItem('users'));
-        currentUser = users.find(u => u.email === currentUser.email);
-        document.getElementById('userBalance').innerText = currentUser.balance.toFixed(2);
-    }
-}, 2000);
+setInterval(() => { if(currentUser) updateUserData(); }, 5000);
 </script>
 </body>
 </html>
