@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMM Panel - Cheapest Services</title>
+    <style>
+        * {margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif;}
+        body {background: #0f172a; color: #fff;}
+       .container {max-width: 500px; margin: 0 auto; padding: 20px;}
+       .header {text-align: center; padding: 30px 0;}
+       .header h1 {color: #38bdf8; font-size: 28px;}
+       .header p {color: #94a3b8; margin-top: 8px;}
+       .card {background: #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #334155;}
+       .card h2 {font-size: 18px; margin-bottom: 15px; color: #38bdf8;}
+        input, select {width: 100%; padding: 12px; margin: 8px 0; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 16px;}
+        input:focus, select:focus {outline: none; border-color: #38bdf8;}
+        button {width: 100%; padding: 14px; background: #38bdf8; color: #0f172a; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px;}
+        button:hover {background: #0ea5e9;}
+       .service-box {display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #334155;}
+       .service-box:last-child {border-bottom: none;}
+       .price {color: #4ade80; font-weight: bold;}
+       .footer {text-align: center; margin-top: 30px; color: #64748b; font-size: 14px;}
+        #orderStatus {margin-top: 15px; padding: 10px; border-radius: 8px; display: none;}
+       .success {background: #166534; color: #bbf7d0;}
+       .error {background: #7f1d1d; color: #fecaca;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ SMM Panel</h1>
+            <p>Instagram, YouTube, TikTok Services</p>
+        </div>
+
+        <div class="card">
+            <h2>New Order</h2>
+            <select id="category">
+                <option value="">Select Category</option>
+                <option value="instagram">Instagram Followers</option>
+                <option value="youtube">YouTube Views</option>
+                <option value="tiktok">TikTok Likes</option>
+            </select>
+            <select id="service">
+                <option value="">Select Service First</option>
+            </select>
+            <input type="text" id="link" placeholder="Profile/Video Link">
+            <input type="number" id="quantity" placeholder="Quantity" min="100">
+            <button onclick="placeOrder()">Place Order - ₹0.00</button>
+            <div id="orderStatus"></div>
+        </div>
+
+        <div class="card">
+            <h2>Service Rates</h2>
+            <div class="service-box">
+                <span>Instagram Followers</span>
+                <span class="price">₹60 / 1K</span>
+            </div>
+            <div class="service-box">
+                <span>YouTube Views</span>
+                <span class="price">₹40 / 1K</span>
+            </div>
+            <div class="service-box">
+                <span>TikTok Likes</span>
+                <span class="price">₹25 / 1K</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>24/7 Support | Instant Start</p>
+        </div>
+    </div>
+
+    <script>
+        const services = {
+            instagram: [
+                {id: 101, name: "IG Followers [HQ]", rate: 60},
+                {id: 102, name: "IG Likes [Fast]", rate: 15}
+            ],
+            youtube: [
+                {id: 201, name: "YT Views [Monetizable]", rate: 40},
+                {id: 202, name: "YT Subscribers", rate: 500}
+            ],
+            tiktok: [
+                {id: 301, name: "TikTok Likes", rate: 25},
+                {id: 302, name: "TikTok Views", rate: 5}
+            ]
+        };
+
+        document.getElementById('category').addEventListener('change', function() {
+            const cat = this.value;
+            const serviceSelect = document.getElementById('service');
+            serviceSelect.innerHTML = '<option value="">Select Service</option>';
+            
+            if(services[cat]) {
+                services[cat].forEach(s => {
+                    serviceSelect.innerHTML += `<option value="${s.id}" data-rate="${s.rate}">${s.name} - ₹${s.rate}/1K</option>`;
+                });
+            }
+            updatePrice();
+        });
+
+        document.getElementById('service').addEventListener('change', updatePrice);
+        document.getElementById('quantity').addEventListener('input', updatePrice);
+
+        function updatePrice() {
+            const service = document.getElementById('service');
+            const qty = document.getElementById('quantity').value || 0;
+            const rate = service.options[service.selectedIndex]?.dataset.rate || 0;
+            const total = (qty / 1000 * rate).toFixed(2);
+            document.querySelector('button').innerText = `Place Order - ₹${total}`;
+        }
+
+        function placeOrder() {
+            const link = document.getElementById('link').value;
+            const qty = document.getElementById('quantity').value;
+            const service = document.getElementById('service').value;
+            const status = document.getElementById('orderStatus');
+            
+            if(!service ||!link ||!qty) {
+                status.className = 'error';
+                status.style.display = 'block';
+                status.innerText = 'Sabhi fields bharo bhai!';
+                return;
+            }
+            
+            status.className = 'success';
+            status.style.display = 'block';
+            status.innerText = `Order Placed! Order ID: #${Math.floor(Math.random() * 90000) + 10000}`;
+            
+            // Yaha API call lagegi real order ke liye
+            console.log('Order Data:', {service, link, qty});
+        }
+    </script>
+</body>
+</html>
