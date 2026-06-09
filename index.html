@@ -3,134 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMM Panel - Cheapest Services</title>
+    <title id="pageTitle">SMM Panel</title>
     <style>
-        * {margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif;}
-        body {background: #0f172a; color: #fff;}
-       .container {max-width: 500px; margin: 0 auto; padding: 20px;}
-       .header {text-align: center; padding: 30px 0;}
-       .header h1 {color: #38bdf8; font-size: 28px;}
-       .header p {color: #94a3b8; margin-top: 8px;}
-       .card {background: #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #334155;}
-       .card h2 {font-size: 18px; margin-bottom: 15px; color: #38bdf8;}
-        input, select {width: 100%; padding: 12px; margin: 8px 0; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 16px;}
-        input:focus, select:focus {outline: none; border-color: #38bdf8;}
-        button {width: 100%; padding: 14px; background: #38bdf8; color: #0f172a; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px;}
-        button:hover {background: #0ea5e9;}
-       .service-box {display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #334155;}
-       .service-box:last-child {border-bottom: none;}
-       .price {color: #4ade80; font-weight: bold;}
-       .footer {text-align: center; margin-top: 30px; color: #64748b; font-size: 14px;}
-        #orderStatus {margin-top: 15px; padding: 10px; border-radius: 8px; display: none;}
-       .success {background: #166534; color: #bbf7d0;}
-       .error {background: #7f1d1d; color: #fecaca;}
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #0f172a; color: #e2e8f0; }
+       .announcement { background: #facc15; color: #020617; text-align: center; padding: 8px; font-weight: bold; display: none; }
+       .navbar { background: #1e293b; padding: 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
+       .logo { font-size: 1.5rem; font-weight: bold; color: #38bdf8; }
+       .nav-right { display: flex; gap: 1rem; align-items: center; }
+       .balance { background: #334155; padding: 8px 16px; border-radius: 20px; }
+       .btn-logout { background: #f87171; color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; border: none; }
+       .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+       .auth-box { max-width: 400px; margin: 5rem auto; background: #1e293b; padding: 2rem; border-radius: 12px; border: 1px solid #334155; }
+       .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+       .card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; margin-bottom: 1rem; }
+        h2 { color: #38bdf8; margin-bottom: 1rem; }
+        input, select, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #e2e8f0; font-size: 16px; }
+        button { background: #38bdf8; color: #0f172a; font-weight: bold; cursor: pointer; border: none; }
+        button:hover { background: #0ea5e9; }
+       .tabs { display: flex; gap: 1rem; margin-bottom: 1rem; }
+       .tab { padding: 8px 16px; background: #334155; border-radius: 8px; cursor: pointer; }
+       .tab.active { background: #38bdf8; color: #0f172a; }
+       .order-item { background: #0f172a; padding: 10px; margin: 8px 0; border-radius: 8px; border-left: 3px solid #38bdf8; }
+       .status-Pending { color: #facc15; }
+       .status-Completed { color: #4ade80; }
+       .status-Cancelled { color: #f87171; }
+       .maintenance { text-align: center; padding: 4rem; font-size: 2rem; color: #f87171; }
+       .hidden { display: none; }
+        @media(max-width: 768px) {.grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>⚡ SMM Panel</h1>
-            <p>Instagram, YouTube, TikTok Services</p>
-        </div>
-
-        <div class="card">
-            <h2>New Order</h2>
-            <select id="category">
-                <option value="">Select Category</option>
-                <option value="instagram">Instagram Followers</option>
-                <option value="youtube">YouTube Views</option>
-                <option value="tiktok">TikTok Likes</option>
-            </select>
-            <select id="service">
-                <option value="">Select Service First</option>
-            </select>
-            <input type="text" id="link" placeholder="Profile/Video Link">
-            <input type="number" id="quantity" placeholder="Quantity" min="100">
-            <button onclick="placeOrder()">Place Order - ₹0.00</button>
-            <div id="orderStatus"></div>
-        </div>
-
-        <div class="card">
-            <h2>Service Rates</h2>
-            <div class="service-box">
-                <span>Instagram Followers</span>
-                <span class="price">₹60 / 1K</span>
+    <div class="announcement" id="announcementBar"></div>
+    
+    <!-- LOGIN/REGISTER -->
+    <div id="authSection">
+        <div class="auth-box">
+            <div class="tabs">
+                <div class="tab active" onclick="showAuth('login')">Login</div>
+                <div class="tab" onclick="showAuth('register')">Register</div>
             </div>
-            <div class="service-box">
-                <span>YouTube Views</span>
-                <span class="price">₹40 / 1K</span>
+            
+            <div id="loginForm">
+                <h2>Login</h2>
+                <input type="email" id="loginEmail" placeholder="Gmail">
+                <input type="password" id="loginPassword" placeholder="Password">
+                <button onclick="loginUser()">Login</button>
             </div>
-            <div class="service-box">
-                <span>TikTok Likes</span>
-                <span class="price">₹25 / 1K</span>
-            </div>
-        </div>
 
-        <div class="footer">
-            <p>24/7 Support | Instant Start</p>
+            <div id="registerForm" class="hidden">
+                <h2>Register</h2>
+                <input type="text" id="regName" placeholder="Full Name">
+                <input type="email" id="regEmail" placeholder="Gmail">
+                <input type="password" id="regPassword" placeholder="Password">
+                <button onclick="registerUser()">Create Account</button>
+            </div>
         </div>
     </div>
 
-    <script>
-        const services = {
-            instagram: [
-                {id: 101, name: "IG Followers [HQ]", rate: 60},
-                {id: 102, name: "IG Likes [Fast]", rate: 15}
-            ],
-            youtube: [
-                {id: 201, name: "YT Views [Monetizable]", rate: 40},
-                {id: 202, name: "YT Subscribers", rate: 500}
-            ],
-            tiktok: [
-                {id: 301, name: "TikTok Likes", rate: 25},
-                {id: 302, name: "TikTok Views", rate: 5}
-            ]
-        };
+    <!-- MAIN DASHBOARD -->
+    <div id="dashboard" class="hidden">
+        <div class="navbar">
+            <div class="logo" id="siteNameLogo">⚡ SMM Panel</div>
+            <div class="nav-right">
+                <div>Hi, <span id="userName"></span></div>
+                <div class="balance">Balance: ₹<span id="userBalance">0</span></div>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
+        </div>
 
-        document.getElementById('category').addEventListener('change', function() {
-            const cat = this.value;
-            const serviceSelect = document.getElementById('service');
-            serviceSelect.innerHTML = '<option value="">Select Service</option>';
-            
-            if(services[cat]) {
-                services[cat].forEach(s => {
-                    serviceSelect.innerHTML += `<option value="${s.id}" data-rate="${s.rate}">${s.name} - ₹${s.rate}/1K</option>`;
-                });
-            }
-            updatePrice();
+        <div class="container">
+            <div class="grid">
+                <div class="card">
+                    <h2>New Order</h2>
+                    <select id="category" onchange="loadServices()"><option value="">Select Category</option></select>
+                    <select id="service"><option value="">Select Service First</option></select>
+                    <input type="text" id="link" placeholder="Profile/Video Link">
+                    <input type="number" id="quantity" placeholder="Quantity" oninput="calcPrice()">
+                    <p>Min: <span id="minQty">0</span> | Max: <span id="maxQty">0</span></p>
+                    <p>Total: ₹<span id="totalPrice">0.00</span></p>
+                    <button onclick="placeOrder()">Place Order</button>
+                </div>
+
+                <div class="card">
+                    <div class="tabs">
+                        <div class="tab active" onclick="showTab('services')">Services</div>
+                        <div class="tab" onclick="showTab('orders')">My Orders</div>
+                    </div>
+                    <div id="servicesTab"><div id="servicesTableBody"></div></div>
+                    <div id="ordersTab" class="hidden"><div id="orderList"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="maintenanceDiv" class="maintenance hidden">🚧 Site Under Maintenance</div>
+
+<script>
+// INIT DEFAULT DATA
+if(!localStorage.getItem('siteSettings')) {
+    localStorage.setItem('siteSettings', JSON.stringify({
+        siteName: 'HARIOM MODDER', defaultBalance: 1000, announcement: '', maintenance: false
+    }));
+}
+if(!localStorage.getItem('allServices')) {
+    localStorage.setItem('allServices', JSON.stringify({
+        instagram: [{id: 1001, name: "Instagram Followers", rate: 60, min: 100, max: 100000}],
+        youtube: [{id: 2001, name: "YouTube Views", rate: 40, min: 1000, max: 1000000}]
+    }));
+}
+if(!localStorage.getItem('users')) localStorage.setItem('users', JSON.stringify([]));
+
+let currentUser = null;
+
+function init() {
+    let settings = JSON.parse(localStorage.getItem('siteSettings'));
+    if(settings.maintenance) {
+        document.getElementById('authSection').classList.add('hidden');
+        document.getElementById('dashboard').classList.add('hidden');
+        document.getElementById('maintenanceDiv').classList.remove('hidden');
+        return;
+    }
+    document.getElementById('siteNameLogo').innerText = '⚡ ' + settings.siteName;
+    document.getElementById('pageTitle').innerText = settings.siteName;
+    if(settings.announcement) {
+        document.getElementById('announcementBar').style.display = 'block';
+        document.getElementById('announcementBar').innerText = settings.announcement;
+    }
+    
+    // Check if logged in
+    let loggedInEmail = sessionStorage.getItem('loggedInUser');
+    if(loggedInEmail) {
+        let users = JSON.parse(localStorage.getItem('users'));
+        currentUser = users.find(u => u.email === loggedInEmail);
+        if(currentUser) showDashboard();
+    }
+}
+
+function showAuth(type) {
+    document.getElementById('loginForm').classList.toggle('hidden', type!== 'login');
+    document.getElementById('registerForm').classList.toggle('hidden', type!== 'register');
+    document.querySelectorAll('#authSection.tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+function registerUser() {
+    let name = document.getElementById('regName').value;
+    let email = document.getElementById('regEmail').value.toLowerCase();
+    let pass = document.getElementById('regPassword').value;
+    if(!name ||!email ||!pass) return alert('Sab field bhar');
+    
+    let users = JSON.parse(localStorage.getItem('users'));
+    if(users.find(u => u.email === email)) return alert('Email already registered');
+    
+    let settings = JSON.parse(localStorage.getItem('siteSettings'));
+    users.push({
+        id: Date.now(), name: name, email: email, password: pass,
+        balance: settings.defaultBalance, joinDate: new Date().toLocaleString()
+    });
+    localStorage.setItem('users', JSON.stringify(users));
+    alert('Account Created! Ab Login kar');
+    showAuth('login');
+}
+
+function loginUser() {
+    let email = document.getElementById('loginEmail').value.toLowerCase();
+    let pass = document.getElementById('loginPassword').value;
+    let users = JSON.parse(localStorage.getItem('users'));
+    let user = users.find(u => u.email === email && u.password === pass);
+    if(!user) return alert('Wrong Email/Password');
+    
+    currentUser = user;
+    sessionStorage.setItem('loggedInUser', user.email);
+    showDashboard();
+}
+
+function showDashboard() {
+    document.getElementById('authSection').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    document.getElementById('userName').innerText = currentUser.name;
+    document.getElementById('userBalance').innerText = currentUser.balance.toFixed(2);
+    loadCategories();
+    loadOrders();
+}
+
+function logout() {
+    sessionStorage.removeItem('loggedInUser');
+    location.reload();
+}
+
+function loadCategories() {
+    let services = JSON.parse(localStorage.getItem('allServices'));
+    let catSelect = document.getElementById('category');
+    catSelect.innerHTML = '<option value="">Select Category</option>';
+    Object.keys(services).forEach(cat => {
+        catSelect.innerHTML += `<option value="${cat}">${cat.toUpperCase()}</option>`;
+    });
+}
+
+function loadServices() {
+    let cat = document.getElementById('category').value;
+    let services = JSON.parse(localStorage.getItem('allServices'));
+    let serviceSelect = document.getElementById('service');
+    let tableBody = document.getElementById('servicesTableBody');
+    serviceSelect.innerHTML = '<option value="">Select Service</option>';
+    tableBody.innerHTML = '';
+    if(services[cat]) {
+        services[cat].forEach(s => {
+            serviceSelect.innerHTML += `<option value="${s.id}" data-rate="${s.rate}" data-min="${s.min}" data-max="${s.max}">${s.name}</option>`;
+            tableBody.innerHTML += `<p><b>${s.name}</b> - ₹${s.rate}/1K | Min: ${s.min}</p>`;
         });
+    }
+}
 
-        document.getElementById('service').addEventListener('change', updatePrice);
-        document.getElementById('quantity').addEventListener('input', updatePrice);
+function calcPrice() {
+    let service = document.getElementById('service');
+    let opt = service.options[service.selectedIndex];
+    let qty = document.getElementById('quantity').value;
+    let rate = opt?.dataset.rate || 0;
+    document.getElementById('minQty').innerText = opt?.dataset.min || 0;
+    document.getElementById('maxQty').innerText = opt?.dataset.max || 0;
+    document.getElementById('totalPrice').innerText = (qty / 1000 * rate).toFixed(2);
+}
 
-        function updatePrice() {
-            const service = document.getElementById('service');
-            const qty = document.getElementById('quantity').value || 0;
-            const rate = service.options[service.selectedIndex]?.dataset.rate || 0;
-            const total = (qty / 1000 * rate).toFixed(2);
-            document.querySelector('button').innerText = `Place Order - ₹${total}`;
-        }
+function placeOrder() {
+    let service = document.getElementById('service');
+    let opt = service.options[service.selectedIndex];
+    if(!opt.value) return alert('Service select kar');
+    let qty = parseInt(document.getElementById('quantity').value);
+    let min = parseInt(opt.dataset.min);
+    let max = parseInt(opt.dataset.max);
+    if(qty < min || qty > max) return alert(`Quantity ${min} se ${max} ke beech honi chahiye`);
+    
+    let total = parseFloat(document.getElementById('totalPrice').innerText);
+    if(total > currentUser.balance) return alert('Balance kam hai');
+    
+    // Balance deduct karo
+    let users = JSON.parse(localStorage.getItem('users'));
+    let userIndex = users.findIndex(u => u.email === currentUser.email);
+    users[userIndex].balance -= total;
+    currentUser.balance -= total;
+    localStorage.setItem('users', JSON.stringify(users));
+    document.getElementById('userBalance').innerText = currentUser.balance.toFixed(2);
+    
+    // Order save karo
+    let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+    orders.unshift({
+        id: Date.now(), userEmail: currentUser.email, service: opt.text,
+        link: document.getElementById('link').value, qty: qty, total: total,
+        status: 'Pending', date: new Date().toLocaleString()
+    });
+    localStorage.setItem('orders', JSON.stringify(orders));
+    alert('Order Placed Successfully!');
+    loadOrders();
+}
 
-        function placeOrder() {
-            const link = document.getElementById('link').value;
-            const qty = document.getElementById('quantity').value;
-            const service = document.getElementById('service').value;
-            const status = document.getElementById('orderStatus');
-            
-            if(!service ||!link ||!qty) {
-                status.className = 'error';
-                status.style.display = 'block';
-                status.innerText = 'Sabhi fields bharo bhai!';
-                return;
-            }
-            
-            status.className = 'success';
-            status.style.display = 'block';
-            status.innerText = `Order Placed! Order ID: #${Math.floor(Math.random() * 90000) + 10000}`;
-            
-            // Yaha API call lagegi real order ke liye
-            console.log('Order Data:', {service, link, qty});
-        }
-    </script>
+function loadOrders() {
+    let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+    let myOrders = orders.filter(o => o.userEmail === currentUser.email);
+    document.getElementById('orderList').innerHTML = myOrders.map(o => `
+        <div class="order-item">
+            <b>#${o.id}</b> - ${o.service}<br>
+            Qty: ${o.qty} | ₹${o.total} | <span class="status-${o.status}">${o.status}</span><br>
+            <small>${o.date}</small>
+        </div>
+    `).join('') || '<p>No orders yet</p>';
+}
+
+function showTab(tab) {
+    document.getElementById('servicesTab').classList.toggle('hidden', tab!== 'services');
+    document.getElementById('ordersTab').classList.toggle('hidden', tab!== 'orders');
+    document.querySelectorAll('#dashboard.tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+init();
+setInterval(() => {
+    init();
+    if(currentUser) {
+        let users = JSON.parse(localStorage.getItem('users'));
+        currentUser = users.find(u => u.email === currentUser.email);
+        document.getElementById('userBalance').innerText = currentUser.balance.toFixed(2);
+    }
+}, 2000);
+</script>
 </body>
 </html>
